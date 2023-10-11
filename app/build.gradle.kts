@@ -7,20 +7,15 @@ plugins {
 }
 
 apply(from = "../config/gradle/build-scripts/android.gradle")
+apply(from = "../config/gradle/build-scripts/compose.gradle")
 
-android {
-    defaultConfig {
-        applicationId = "com.voitenko.testgithubapp"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
+android.defaultConfig {
+    applicationId = "com.voitenko.testgithubapp"
 }
 
 dependencies {
+    implementation(projects.common.designSystem)
+
     // Std-libs
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.coroutines)

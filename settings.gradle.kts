@@ -24,5 +24,8 @@ include(
 
     ":common:design-system",
     ":common:architecture-component",
+
+    ":features:github-repositories",
+    ":features:repository-details",
 )
  

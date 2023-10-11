@@ -4,35 +4,31 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kapt)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.serialization)
 }
 
 apply(from = "../../config/gradle/build-scripts/android.gradle")
 
 android {
-    namespace = "com.voitenko.testgithubapp.data.remote"
-
-    buildTypes {
-        all {
-            buildConfigField(name = "API_URL", type = "String", value = "\"https://api.github.com\"")
-        }
-    }
+    namespace = "com.voitenko.testgithubapp.features.repositorydetails"
 }
 
 dependencies {
+    implementation(projects.common.designSystem)
     implementation(projects.common.architectureComponent)
 
-    // Std-libs
-    implementation(libs.coroutines)
-    implementation(libs.serialization)
+    // Compose third-party
+    implementation(libs.compose.navigation)
 
-    // Retrofit
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.logger)
-    implementation(libs.retrofit.convertor)
+    // Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
 
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.hilt.compose)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.extensions)
     kapt(libs.hilt.extensions.compiler)

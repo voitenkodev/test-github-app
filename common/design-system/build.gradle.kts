@@ -5,6 +5,7 @@ plugins {
 }
 
 apply(from = "../../config/gradle/build-scripts/android.gradle")
+apply(from = "../../config/gradle/build-scripts/compose.gradle")
 
 android {
     namespace = "com.voitenko.testgithubapp.designsystem"
