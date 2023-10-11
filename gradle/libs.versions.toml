@@ -1,21 +1,27 @@
 [versions]
-agp = "8.2.0-beta06"
-kotlin = "1.9.0"
-core-ktx = "1.12.0"
-junit = "4.13.2"
-androidx-test-ext-junit = "1.1.5"
-espresso-core = "3.5.1"
-lifecycle-runtime-ktx = "2.6.2"
-activity-compose = "1.8.0"
-compose-bom = "2023.08.00"
+
+android-gradle-vers = "8.1.2"
+compose-bom = "2023.10.00"
+kotlin-vers = "1.9.10"
+coroutines-vers = "1.7.1"
+serialization-vers = "1.5.0"
+activity-compose-vers = "1.8.0"
+compose-navigation-vers = "2.7.4"
+lifecycle-viewmodel-vers = "2.6.2"
+retrofit-vers = "2.9.0"
+okhttp-logger-vers = "4.11.0"
+retrofit-convertor-vers = "0.8.0"
+hilt-vers = "2.44"
+hilt-compose-vers = "1.0.0"
+hilt-extension-vers = "1.3.0"
+compose-utils-vers = "1.5.3"
 
 [libraries]
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-viewmodel-vers" }
+coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines-vers" }
+serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization-vers" }
+
+#COMPOSE
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -25,7 +31,28 @@ ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 material3 = { group = "androidx.compose.material3", name = "material3" }
 
-[plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+#COMPOSE THIRD-PARTY
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose-vers" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation-vers" }
+compose-utils = { module = "androidx.compose.ui:ui-util", version.ref = "compose-utils-vers" }
 
+#HILT
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-vers" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt-vers" }
+hilt-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-compose-vers" }
+hilt-extensions = { module = "it.czerwinski.android.hilt:hilt-extensions", version.ref = "hilt-extension-vers" }
+hilt-extensions-compiler = { module = "it.czerwinski.android.hilt:hilt-processor", version.ref = "hilt-extension-vers" }
+
+#RETROFIT
+retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit-vers" }
+retrofit-logger = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp-logger-vers" }
+retrofit-convertor = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-convertor-vers" }
+
+[plugins]
+android-app = { id = "com.android.application", version.ref = "android-gradle-vers" }
+parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-vers" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-vers" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-vers" }
+android-library = { id = "com.android.library", version.ref = "android-gradle-vers" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-vers" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-vers" }
