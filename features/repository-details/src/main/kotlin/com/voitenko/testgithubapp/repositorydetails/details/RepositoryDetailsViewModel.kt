@@ -33,17 +33,16 @@ internal class RepositoryDetailsViewModel @Inject constructor(
             repositoryByIdUseCase
                 .invoke(id, owner)
                 .onStart {
-                    _state.update { it.copy(loading = true, error = null) }
+                    _state.update { it.copy(loading = true) }
                 }.onEach { response ->
                     _state.update {
                         it.copy(
                             repository = response,
-                            loading = false,
-                            error = null
+                            loading = false
                         )
                     }
-                }.catch {
-                    _state.update { it.copy(loading = false, error = it.error) }
+                }.catch { t ->
+                    _state.update { it.copy(loading = false, error = t.localizedMessage) }
                 }.launchIn(this)
         }
     }

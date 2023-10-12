@@ -54,17 +54,16 @@ internal class GithubRepositoriesViewModel @Inject constructor(
     private fun fetchList(query: String) = getRepositoriesUseCase
         .invoke(query = query)
         .onStart {
-            _state.update { it.copy(loading = true, error = null) }
+            _state.update { it.copy(loading = true) }
         }.onEach { response ->
             _state.update {
                 it.copy(
                     repositories = response.toPersistentList(),
                     loading = false,
-                    error = null
                 )
             }
-        }.catch {
-            _state.update { it.copy(loading = false, error = it.error) }
+        }.catch { t ->
+            _state.update { it.copy(loading = false, error = t.localizedMessage) }
         }
 
     fun clearErrors() {

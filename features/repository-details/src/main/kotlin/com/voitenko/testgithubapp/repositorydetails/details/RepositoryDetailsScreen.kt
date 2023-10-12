@@ -1,10 +1,13 @@
 package com.voitenko.testgithubapp.repositorydetails.details
 
 import Design
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import components.Error
 import components.Loading
 import components.texts.TextBody1
@@ -17,7 +20,12 @@ internal fun RepositoryDetailsScreen(
     viewModel: RepositoryDetailsViewModel
 ) {
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
 
         TextHead2(text = state.repository?.fullName ?: "-")
 
