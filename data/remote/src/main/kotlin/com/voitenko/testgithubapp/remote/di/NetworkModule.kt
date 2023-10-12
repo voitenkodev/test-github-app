@@ -2,17 +2,12 @@ package com.voitenko.testgithubapp.remote.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.voitenko.testgithubapp.remote.Api
-import com.voitenko.testgithubapp.remote.AuthAuthenticator
 import com.voitenko.testgithubapp.remote.RemoteDataSource
-import com.voitenko.testgithubapp.remote.TokenStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import it.czerwinski.android.hilt.BuildConfig
-import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
-import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,19 +18,11 @@ import javax.inject.Singleton
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class AuthInterceptor
+annotation class GithubOkHttpClient
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class AuthCustomAuthenticator
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class AuthOkHttpClient
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class AuthRetrofit
+annotation class GithubRetrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -44,19 +31,19 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideRemoteDataSource(
-        @AuthRetrofit retrofit: Retrofit,
+        @GithubRetrofit retrofit: Retrofit,
     ): RemoteDataSource {
         return RemoteDataSource(
             retrofit.create(Api::class.java)
         )
     }
 
-    @AuthRetrofit
+    @GithubRetrofit
     @Provides
     @Singleton
-    fun provideAuthRetrofit(
+    fun provideRetrofit(
         json: Json,
-        @AuthOkHttpClient okHttpClient: OkHttpClient,
+        @GithubOkHttpClient okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit
             .Builder()
@@ -66,19 +53,15 @@ object NetworkModule {
             .build()
     }
 
-    @AuthOkHttpClient
+    @GithubOkHttpClient
     @Provides
     @Singleton
-    fun provideAuthInterceptorOkHttpClient(
+    fun provideInterceptorOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        @AuthInterceptor authInterceptor: Interceptor,
-        @AuthCustomAuthenticator authAuthenticator: AuthAuthenticator
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(100, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(authInterceptor)
-            .authenticator(authAuthenticator)
             .connectTimeout(60, TimeUnit.SECONDS)
             .build()
     }
@@ -87,33 +70,8 @@ object NetworkModule {
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+            level = if (com.voitenko.testgithubapp.data.remote.BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
             else HttpLoggingInterceptor.Level.NONE
-        }
-    }
-
-    @AuthCustomAuthenticator
-    @Provides
-    @Singleton
-    fun provideAuthAuthenticator(
-        tokenStore: TokenStore,
-    ): AuthAuthenticator {
-        return AuthAuthenticator(
-            tokenStore
-        )
-    }
-
-    @AuthInterceptor
-    @Provides
-    @Singleton
-    fun provideAuthInterceptor(
-        tokenStore: TokenStore,
-    ): Interceptor {
-        return Interceptor { chain ->
-            val token = runBlocking { tokenStore.getAuthToken() }
-            val request = chain.request().newBuilder()
-            request.addHeader("Authorization", "Bearer $token")
-            chain.proceed(request.build())
         }
     }
 

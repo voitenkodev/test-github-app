@@ -9,11 +9,11 @@ import retrofit2.http.Query
 interface Api {
     @GET("/search/repositories")
     suspend fun getRepositories(
-        @Header("X-GitHub-Api-Version") version: String = "2022-11-28",
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("order") order: String = "desc",
+        @Query("perPage") perPage: Int = 30,
     ): RepositoriesDto
 
-    // TODO FIX
     @GET("/search/repositories")
     suspend fun getRepositoryById(
         @Header("X-GitHub-Api-Version") version: String = "2022-11-28",
