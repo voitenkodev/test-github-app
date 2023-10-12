@@ -1,4 +1,4 @@
-package com.voitenko.testgithubapp.remote
+package com.voitenko.testgithubapp
 
 abstract class NavRoute<T : NavParams> {
 

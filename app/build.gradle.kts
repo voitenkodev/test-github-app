@@ -15,24 +15,20 @@ android.defaultConfig {
 
 dependencies {
     implementation(projects.common.designSystem)
+    implementation(projects.common.architectureComponent)
 
-    // Std-libs
-    implementation(libs.lifecycle.viewmodel)
-    implementation(libs.coroutines)
+    // Features
+    implementation(projects.features.githubRepositories)
+    implementation(projects.features.repositoryDetails)
 
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
     kapt(libs.hilt.compiler)
-    implementation(libs.hilt.extensions)
-    kapt(libs.hilt.extensions.compiler)
 
     // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
 
     // Compose third-party
     implementation(libs.activity.compose)

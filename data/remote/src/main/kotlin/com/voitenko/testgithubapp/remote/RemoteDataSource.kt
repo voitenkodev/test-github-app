@@ -1,5 +1,6 @@
 package com.voitenko.testgithubapp.remote
 
+import com.voitenko.testgithubapp.ErrorStatus
 import com.voitenko.testgithubapp.remote.dto.RepositoriesDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

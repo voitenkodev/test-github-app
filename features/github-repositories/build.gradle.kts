@@ -7,6 +7,7 @@ plugins {
 }
 
 apply(from = "../../config/gradle/build-scripts/android.gradle")
+apply(from = "../../config/gradle/build-scripts/compose.gradle")
 
 android {
     namespace = "com.voitenko.testgithubapp.features.githubrepositories"
@@ -14,6 +15,7 @@ android {
 
 dependencies {
     implementation(projects.common.designSystem)
+    implementation(projects.common.architectureComponent)
 
     // Compose third-party
     implementation(libs.compose.navigation)
@@ -21,14 +23,9 @@ dependencies {
     // Compose
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
 
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)
     kapt(libs.hilt.compiler)
-    implementation(libs.hilt.extensions)
-    kapt(libs.hilt.extensions.compiler)
 }

@@ -1,8 +1,8 @@
-package com.voitenko.testgithubapp.details
+package com.voitenko.testgithubapp.repositorydetails.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.voitenko.testgithubapp.RepositoryDetailsRoute
+import com.voitenko.testgithubapp.repositorydetails.RepositoryDetailsRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

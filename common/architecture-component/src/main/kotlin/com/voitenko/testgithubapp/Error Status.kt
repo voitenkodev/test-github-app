@@ -1,8 +1,5 @@
-package com.voitenko.testgithubapp.remote
+package com.voitenko.testgithubapp
 
-import androidx.annotation.Keep
-
-// TODO MOVE IT TO UTILS
 sealed class ErrorStatus(override val message: String?) : Throwable(message = message) {
     data class UnAuth(override val message: String?) : ErrorStatus(message)
     data object NoInternetConnection : ErrorStatus("No Internet Connection")

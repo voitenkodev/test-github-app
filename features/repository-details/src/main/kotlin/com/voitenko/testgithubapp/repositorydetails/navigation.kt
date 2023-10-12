@@ -1,4 +1,4 @@
-package com.voitenko.testgithubapp
+package com.voitenko.testgithubapp.repositorydetails
 
 import android.net.Uri
 import androidx.compose.runtime.collectAsState
@@ -7,15 +7,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.voitenko.testgithubapp.details.RepositoryDetailsScreen
-import com.voitenko.testgithubapp.details.RepositoryDetailsViewModel
-import com.voitenko.testgithubapp.remote.NavParams
-import com.voitenko.testgithubapp.remote.NavRoute
+import com.voitenko.testgithubapp.NavParams
+import com.voitenko.testgithubapp.NavRoute
+import com.voitenko.testgithubapp.repositorydetails.details.RepositoryDetailsScreen
+import com.voitenko.testgithubapp.repositorydetails.details.RepositoryDetailsViewModel
 
 object RepositoryDetailsRoute : NavRoute<RepositoryDetailsRoute.Params>() {
 
     private const val PATH = "repository/details"
     internal const val ARG_REPO_ID = "repositoryId"
+
     override val route: String = "$PATH?$ARG_REPO_ID={$ARG_REPO_ID}"
 
     override fun build(params: Params): String {
