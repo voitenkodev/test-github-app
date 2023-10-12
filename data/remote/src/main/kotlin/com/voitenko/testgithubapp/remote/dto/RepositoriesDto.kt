@@ -8,7 +8,7 @@ data class RepositoriesDto(
     @SerialName("incomplete_results")
     val incompleteResults: Boolean? = null,
     @SerialName("items")
-    val items: List<ItemDto?>? = null,
+    val items: List<ItemDto>? = null,
     @SerialName("total_count")
     val totalCount: Int? = null
 )

@@ -16,6 +16,7 @@ android {
 dependencies {
     implementation(projects.common.designSystem)
     implementation(projects.common.architectureComponent)
+    implementation(projects.domain.repositories)
 
     // Compose third-party
     implementation(libs.compose.navigation)

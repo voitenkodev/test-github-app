@@ -1,6 +1,7 @@
 package com.voitenko.testgithubapp.remote
 
 import com.voitenko.testgithubapp.ErrorStatus
+import com.voitenko.testgithubapp.remote.dto.ItemDto
 import com.voitenko.testgithubapp.remote.dto.RepositoriesDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -13,6 +14,10 @@ class RemoteDataSource(private val api: Api) {
 
     fun getRepositories(query: String): Flow<RepositoriesDto> {
         return flow { emit(api.getRepositories(query = query)) }.parseErrorMessage()
+    }
+
+    fun getRepositoryById(id: String): Flow<ItemDto> {
+        return flow { emit(api.getRepositoryById(id = id)) }.parseErrorMessage()
     }
 
     private inline fun <reified T> Flow<T>.parseErrorMessage() = this.catch {

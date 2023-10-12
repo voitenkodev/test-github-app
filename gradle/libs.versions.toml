@@ -11,7 +11,7 @@ lifecycle-viewmodel-vers = "2.6.2"
 retrofit-vers = "2.9.0"
 okhttp-logger-vers = "4.11.0"
 retrofit-convertor-vers = "0.8.0"
-hilt-vers = "2.44"
+hilt-vers = "2.46"
 hilt-compose-vers = "1.0.0"
 hilt-extension-vers = "1.3.0"
 compose-utils-vers = "1.5.3"
@@ -50,7 +50,6 @@ retrofit-convertor = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-seri
 
 [plugins]
 android-app = { id = "com.android.application", version.ref = "android-gradle-vers" }
-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-vers" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-vers" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-vers" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-vers" }

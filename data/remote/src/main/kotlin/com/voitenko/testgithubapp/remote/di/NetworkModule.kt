@@ -11,7 +11,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import it.czerwinski.android.hilt.BuildConfig
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -28,7 +27,7 @@ annotation class AuthInterceptor
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class UserAuthAuthenticator
+annotation class AuthCustomAuthenticator
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
@@ -61,7 +60,7 @@ object NetworkModule {
     ): Retrofit {
         return Retrofit
             .Builder()
-            .baseUrl(BuildConfig.API_URL)
+            .baseUrl(com.voitenko.testgithubapp.data.remote.BuildConfig.API_URL)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .client(okHttpClient)
             .build()
@@ -73,7 +72,7 @@ object NetworkModule {
     fun provideAuthInterceptorOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         @AuthInterceptor authInterceptor: Interceptor,
-        @UserAuthAuthenticator authAuthenticator: AuthAuthenticator
+        @AuthCustomAuthenticator authAuthenticator: AuthAuthenticator
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(100, TimeUnit.SECONDS)
@@ -91,6 +90,17 @@ object NetworkModule {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
             else HttpLoggingInterceptor.Level.NONE
         }
+    }
+
+    @AuthCustomAuthenticator
+    @Provides
+    @Singleton
+    fun provideAuthAuthenticator(
+        tokenStore: TokenStore,
+    ): AuthAuthenticator {
+        return AuthAuthenticator(
+            tokenStore
+        )
     }
 
     @AuthInterceptor

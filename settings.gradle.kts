@@ -20,7 +20,10 @@ rootProject.name = "TestGithubApp"
 
 include(
     ":app",
+
     ":data:remote",
+
+    ":domain:repositories",
 
     ":common:design-system",
     ":common:architecture-component",
