@@ -15,27 +15,35 @@ import com.voitenko.testgithubapp.repositorydetails.details.RepositoryDetailsVie
 object RepositoryDetailsRoute : NavRoute<RepositoryDetailsRoute.Params>() {
 
     private const val PATH = "repository/details"
-    internal const val ARG_REPO_ID = "repositoryId"
+    internal const val NAME = "name"
+    internal const val OWNER = "owner"
 
-    override val route: String = "$PATH?$ARG_REPO_ID={$ARG_REPO_ID}"
+    override val route: String = "$PATH?$NAME={$NAME}&$OWNER={$OWNER}"
 
     override fun build(params: Params): String {
         return Uri.Builder()
             .path(PATH)
-            .appendQueryParameter(ARG_REPO_ID, params.repositoryId)
+            .appendQueryParameter(NAME, params.name)
+            .appendQueryParameter(OWNER, params.owner)
             .build()
             .toString()
     }
 
-    class Params(val repositoryId: String) : NavParams
+    class Params(
+        val name: String,
+        val owner: String,
+    ) : NavParams
 }
 
-fun NavGraphBuilder.repositoryDetailsScreen(
-) {
+fun NavGraphBuilder.repositoryDetailsScreen() {
     composable(
         RepositoryDetailsRoute.route,
-        arguments = listOf(navArgument(RepositoryDetailsRoute.ARG_REPO_ID) { }),
+        arguments = listOf(
+            navArgument(RepositoryDetailsRoute.NAME) { },
+            navArgument(RepositoryDetailsRoute.OWNER) { }
+        ),
     ) {
+
         val viewModel = hiltViewModel<RepositoryDetailsViewModel>()
         val state by viewModel.state.collectAsState()
 

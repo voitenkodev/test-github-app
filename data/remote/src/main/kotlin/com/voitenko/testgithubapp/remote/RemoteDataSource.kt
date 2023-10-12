@@ -16,17 +16,18 @@ class RemoteDataSource(private val api: Api) {
         return flow { emit(api.getRepositories(query = query)) }.parseErrorMessage()
     }
 
-    fun getRepositoryById(id: String): Flow<ItemDto> {
-        return flow { emit(api.getRepositoryById(id = id)) }.parseErrorMessage()
+    fun getRepositoryById(name: String, owner: String): Flow<ItemDto> {
+        return flow { emit(api.getRepositoryById(name = name, owner = owner)) }.parseErrorMessage()
     }
 
     private inline fun <reified T> Flow<T>.parseErrorMessage() = this.catch {
-        val isUnAuth = (it as? HttpException)?.response()?.code() == 401
+        val isLimitRequests = (it as? HttpException)?.response()?.code() == 403
+
         val isUnExpectedServerError = (it as? HttpException)?.response()?.code() in 500..599
 
-        if (isUnAuth)
-            throw ErrorStatus.UnAuth((it as? HttpException)?.response()?.errorBody()?.string())
-        else if (it is UnknownHostException || it is IOException)
+        if (isLimitRequests) {
+            throw ErrorStatus.LimitedRequests
+        } else if (it is UnknownHostException || it is IOException)
             throw ErrorStatus.NoInternetConnection
         else if (isUnExpectedServerError) {
             throw ErrorStatus.UnExpectedServerError("Server is unavailable")

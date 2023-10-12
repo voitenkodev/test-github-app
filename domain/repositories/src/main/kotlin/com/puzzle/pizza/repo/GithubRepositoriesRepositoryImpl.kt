@@ -8,7 +8,6 @@ import it.czerwinski.android.hilt.annotations.BoundTo
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,10 +26,10 @@ private class GithubRepositoriesRepositoryImpl @Inject constructor(
             .flowOn(dispatcher)
     }
 
-    override fun getRepositoryById(id: String): Flow<Repository> {
+    override fun getRepositoryById(name: String, owner: String): Flow<Repository> {
         return remoteDataSource
-            .getRepositoryById(id)
-            .map { it.toDomain() }
+            .getRepositoryById(name, owner)
+            .mapNotNull { it.toDomain() }
             .flowOn(dispatcher)
     }
 }

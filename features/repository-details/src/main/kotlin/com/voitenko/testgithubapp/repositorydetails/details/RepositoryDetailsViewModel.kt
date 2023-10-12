@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,24 +23,32 @@ internal class RepositoryDetailsViewModel @Inject constructor(
     repositoryByIdUseCase: GetRepositoryByIdUseCase
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<RepositoryDetailsState> = MutableStateFlow(
-        RepositoryDetailsState(
-            repositoryId = savedStateHandle.get<String>(RepositoryDetailsRoute.ARG_REPO_ID) ?: "",
-        )
-    )
+    private val _state: MutableStateFlow<RepositoryDetailsState> = MutableStateFlow(RepositoryDetailsState())
     val state: StateFlow<RepositoryDetailsState> = _state.asStateFlow()
 
     init {
+        val id = savedStateHandle.get<String>(RepositoryDetailsRoute.NAME) ?: ""
+        val owner = savedStateHandle.get<String>(RepositoryDetailsRoute.OWNER) ?: ""
         viewModelScope.launch {
             repositoryByIdUseCase
-                .invoke(state.value.repositoryId)
+                .invoke(id, owner)
                 .onStart {
-
-                }.onEach {
-
+                    _state.update { it.copy(loading = true, error = null) }
+                }.onEach { response ->
+                    _state.update {
+                        it.copy(
+                            repository = response,
+                            loading = false,
+                            error = null
+                        )
+                    }
                 }.catch {
-
+                    _state.update { it.copy(loading = false, error = it.error) }
                 }.launchIn(this)
         }
+    }
+
+    fun clearErrors() {
+        _state.update { it.copy(error = null) }
     }
 }

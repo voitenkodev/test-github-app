@@ -15,6 +15,7 @@ object GithubRepositoriesRoute : NavRoute<EmptyNavParams>() {
 
     private const val PATH = "repository/list"
     override val route: String = PATH
+
     override fun build(params: EmptyNavParams): String {
         return Uri.Builder()
             .path(PATH)
@@ -23,14 +24,17 @@ object GithubRepositoriesRoute : NavRoute<EmptyNavParams>() {
     }
 }
 
-fun NavGraphBuilder.githubRepositoriesScreen() {
+fun NavGraphBuilder.githubRepositoriesScreen(
+    onDetailsClick: (name: String, owner: String) -> Unit
+) {
     composable(GithubRepositoriesRoute.route) {
         val viewModel = hiltViewModel<GithubRepositoriesViewModel>()
         val state by viewModel.state.collectAsState()
 
         GithubRepositoriesScreen(
             viewModel = viewModel,
-            state = state
+            state = state,
+            onDetailsClick = onDetailsClick
         )
     }
 }

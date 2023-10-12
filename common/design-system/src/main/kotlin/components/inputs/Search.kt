@@ -8,11 +8,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import controls.Input
 fun InputSearch(
     modifier: Modifier = Modifier,
     value: String,
+    loading: Boolean = false,
     onValueChange: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -37,8 +40,19 @@ fun InputSearch(
         value = value,
         onValueChange = onValueChange,
         trailing = {
+
             AnimatedVisibility(
-                visible = value.isNotEmpty(),
+                visible = loading,
+                enter = fadeIn() + scaleIn(),
+                exit = scaleOut() + fadeOut(),
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            AnimatedVisibility(
+                visible = value.isNotEmpty() && loading.not(),
                 enter = fadeIn() + scaleIn(),
                 exit = scaleOut() + fadeOut(),
             ) {
