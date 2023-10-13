@@ -12,8 +12,12 @@ import java.net.UnknownHostException
 
 class RemoteDataSource(private val api: Api) {
 
-    fun getRepositories(query: String): Flow<RepositoriesDto> {
-        return flow { emit(api.getRepositories(query = query)) }.parseErrorMessage()
+    suspend fun getRepositories(query: String, page: Int, pageSize: Int): RepositoriesDto {
+        return runCatching {
+            api.getRepositories(query = query, perPage = pageSize, page = page)
+        }
+            .onFailure { it.parseErrorMessage() }
+            .getOrThrow()
     }
 
     fun getRepositoryById(name: String, owner: String): Flow<ItemDto> {
@@ -21,22 +25,26 @@ class RemoteDataSource(private val api: Api) {
     }
 
     private inline fun <reified T> Flow<T>.parseErrorMessage() = this.catch {
-        val isLimitRequests = (it as? HttpException)?.response()?.code() == 403
+        it.parseErrorMessage()
+    }
 
-        val isUnExpectedServerError = (it as? HttpException)?.response()?.code() in 500..599
+    private fun Throwable.parseErrorMessage() {
+        val isLimitRequests = (this as? HttpException)?.response()?.code() == 403
+
+        val isUnExpectedServerError = (this as? HttpException)?.response()?.code() in 500..599
 
         if (isLimitRequests) {
             throw ErrorStatus.LimitedRequests
-        } else if (it is UnknownHostException || it is IOException)
+        } else if (this is UnknownHostException || this is IOException)
             throw ErrorStatus.NoInternetConnection
         else if (isUnExpectedServerError) {
             throw ErrorStatus.UnExpectedServerError("Server is unavailable")
-        } else if (it is HttpException) {
+        } else if (this is HttpException) {
             throw ErrorStatus.ExpectedServerError(
-                (it as? HttpException)?.response()?.errorBody()?.string() ?: "Unknown server error (HttpException)"
+                (this as? HttpException)?.response()?.errorBody()?.string() ?: "Unknown server error (HttpException)"
             )
         } else {
-            throw ErrorStatus.UnknownError(it.localizedMessage ?: "Unknown error")
+            throw ErrorStatus.UnknownError(this.localizedMessage ?: "Unknown error")
         }
     }
 }

@@ -12,6 +12,7 @@ interface Api {
         @Query("q") query: String,
         @Query("order") order: String = "desc",
         @Query("perPage") perPage: Int = 10,
+        @Query("page") page: Int = 1,
     ): RepositoriesDto
 
     @GET("/repos/{owner}/{name}")

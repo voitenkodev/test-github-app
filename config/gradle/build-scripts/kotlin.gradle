@@ -11,5 +11,6 @@ kotlin {
         languageSettings.optIn("androidx.compose.animation.ExperimentalAnimationApi")
         languageSettings.optIn("kotlin.time.ExperimentalTime")
         languageSettings.optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
+        languageSettings.optIn("androidx.paging.ExperimentalPagingApi")
     }
 }

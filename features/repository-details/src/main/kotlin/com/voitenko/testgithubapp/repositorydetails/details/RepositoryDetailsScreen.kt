@@ -2,17 +2,20 @@ package com.voitenko.testgithubapp.repositorydetails.details
 
 import Design
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import components.Error
-import components.Loading
 import components.texts.TextBody1
 import components.texts.TextBody2
 import components.texts.TextHead2
+import controls.Toast
 
 @Composable
 internal fun RepositoryDetailsScreen(
@@ -52,7 +55,17 @@ internal fun RepositoryDetailsScreen(
         )
     }
 
-    Error(message = state.error, close = viewModel::clearErrors)
+    if (state.error != null) {
+        Toast(message = state.error, clear = viewModel::clearErrors)
+    }
 
-    Loading(visible = state.loading)
+    if (state.loading) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(56.dp)
+                    .align(Alignment.Center)
+            )
+        }
+    }
 }

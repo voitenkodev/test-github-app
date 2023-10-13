@@ -6,43 +6,45 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.puzzle.pizza.models.Repository
-import components.texts.TextBody1
 import components.texts.TextBody2
 import components.texts.TextHead2
 
 @Composable
-internal fun RepositoryItemContent(
-    modifier: Modifier = Modifier,
-    repo: Repository,
-    onClick: (name: String, owner: String) -> Unit
+internal fun RepositoryErrorItemContent(
+    msg: String,
+    retry: () -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
+            .fillMaxWidth()
             .background(Design.colors.backgrounds.secondary)
             .border(
-                color = Design.colors.shadow,
+                color = Design.colors.primary_accent,
                 width = 1.dp,
                 shape = RoundedCornerShape(8.dp)
             )
             .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick.invoke(repo.name, repo.owner) }
+            .clickable(onClick = retry)
             .padding(12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        TextHead2(text = repo.fullName ?: "-")
-
-        TextBody1(text = repo.description ?: "-")
-
-        TextBody2(
-            text = "Stars - ${repo.stargazersCount}",
-            color = Design.colors.caption
-        )
-    }
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        content = {
+            TextHead2(
+                text = "Error! (Click to Retry)",
+                fontWeight = FontWeight.Bold,
+                color = Design.colors.content
+            )
+            TextBody2(
+                text = msg,
+                color = Design.colors.content
+            )
+        }
+    )
 }

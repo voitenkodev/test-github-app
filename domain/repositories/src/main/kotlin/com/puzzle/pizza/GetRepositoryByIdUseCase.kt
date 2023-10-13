@@ -8,7 +8,6 @@ import javax.inject.Inject
 class GetRepositoryByIdUseCase @Inject constructor(private val repo: GithubRepositoriesApi) {
 
     fun invoke(name: String, owner: String): Flow<Repository> {
-        return repo
-            .getRepositoryById(name, owner)
+        return repo.getRepositoryById(name, owner)
     }
 }

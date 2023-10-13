@@ -7,6 +7,7 @@ plugins {
 }
 
 apply(from = "../../config/gradle/build-scripts/android.gradle")
+apply(from = "../../config/gradle/build-scripts/kotlin.gradle")
 
 android {
     namespace = "com.voitenko.testgithubapp.domain.repositories"
@@ -18,6 +19,9 @@ dependencies {
     // Std-libs
     implementation(libs.coroutines)
     implementation(libs.serialization)
+
+    // Pager
+    implementation(libs.pager)
 
     // Hilt
     implementation(libs.hilt.android)

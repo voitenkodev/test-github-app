@@ -70,7 +70,7 @@ object NetworkModule {
     @Singleton
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = if (com.voitenko.testgithubapp.data.remote.BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+            level = if (com.voitenko.testgithubapp.data.remote.BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC
             else HttpLoggingInterceptor.Level.NONE
         }
     }
