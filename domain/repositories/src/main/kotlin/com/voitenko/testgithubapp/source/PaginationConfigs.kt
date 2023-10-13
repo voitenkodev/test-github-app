@@ -1,4 +1,4 @@
-package com.puzzle.pizza.source
+package com.voitenko.testgithubapp.source
 
 internal const val NETWORK_PAGE_SIZE = 20
 internal const val PREFETCH_DISTANCE = 15

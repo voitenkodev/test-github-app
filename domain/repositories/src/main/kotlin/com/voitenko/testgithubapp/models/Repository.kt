@@ -1,4 +1,4 @@
-package com.puzzle.pizza.models
+package com.voitenko.testgithubapp.models
 
 import com.voitenko.testgithubapp.remote.dto.ItemDto
 

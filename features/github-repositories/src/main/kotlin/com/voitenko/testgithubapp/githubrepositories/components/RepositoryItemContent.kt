@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.puzzle.pizza.models.Repository
+import com.voitenko.testgithubapp.models.Repository
 import components.texts.TextBody1
 import components.texts.TextBody2
 import components.texts.TextHead2

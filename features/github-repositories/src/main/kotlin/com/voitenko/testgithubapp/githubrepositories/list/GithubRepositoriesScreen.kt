@@ -17,7 +17,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
-import com.puzzle.pizza.models.Repository
+import com.voitenko.testgithubapp.models.Repository
 import com.voitenko.testgithubapp.githubrepositories.components.RepositoryErrorItemContent
 import com.voitenko.testgithubapp.githubrepositories.components.RepositoryItemContent
 import components.inputs.InputSearch

@@ -1,6 +1,6 @@
 package com.voitenko.testgithubapp.repositorydetails.details
 
-import com.puzzle.pizza.models.Repository
+import com.voitenko.testgithubapp.models.Repository
 
 internal data class RepositoryDetailsState(
     val repository: Repository? = null,

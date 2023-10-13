@@ -1,15 +1,15 @@
-package com.puzzle.pizza.repo
+package com.voitenko.testgithubapp.repo
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.puzzle.pizza.models.Repository
-import com.puzzle.pizza.models.toDomain
-import com.puzzle.pizza.source.INITIAL_LOAD_SIZE
-import com.puzzle.pizza.source.NETWORK_PAGE_SIZE
-import com.puzzle.pizza.source.PREFETCH_DISTANCE
-import com.puzzle.pizza.source.RepositoriesPagingSource
+import com.voitenko.testgithubapp.models.Repository
+import com.voitenko.testgithubapp.models.toDomain
+import com.voitenko.testgithubapp.source.INITIAL_LOAD_SIZE
+import com.voitenko.testgithubapp.source.NETWORK_PAGE_SIZE
+import com.voitenko.testgithubapp.source.PREFETCH_DISTANCE
+import com.voitenko.testgithubapp.source.RepositoriesPagingSource
 import com.voitenko.testgithubapp.remote.RemoteDataSource
 import com.voitenko.testgithubapp.remote.di.IoDispatcher
 import it.czerwinski.android.hilt.annotations.BoundTo

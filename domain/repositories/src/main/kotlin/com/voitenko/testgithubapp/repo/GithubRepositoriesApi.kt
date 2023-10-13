@@ -1,7 +1,7 @@
-package com.puzzle.pizza.repo
+package com.voitenko.testgithubapp.repo
 
 import androidx.paging.PagingData
-import com.puzzle.pizza.models.Repository
+import com.voitenko.testgithubapp.models.Repository
 import kotlinx.coroutines.flow.Flow
 
 interface GithubRepositoriesApi {

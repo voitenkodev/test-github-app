@@ -1,4 +1,4 @@
-package com.puzzle.pizza.source
+package com.voitenko.testgithubapp.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
