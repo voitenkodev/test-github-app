@@ -45,10 +45,6 @@ internal class GithubRepositoriesViewModel @Inject constructor(
         loadPage(state.value.lastPage + 1)
     }
 
-    fun refreshLastPage() {
-        loadPage(state.value.lastPage)
-    }
-
     private fun loadPage(newPage: Int) = viewModelScope.launch {
         fetchRepositories(
             query = state.value.query,
@@ -57,15 +53,17 @@ internal class GithubRepositoriesViewModel @Inject constructor(
             _state.update { it.copy(loading = LoadingState.Item) }
         }.onEach { response ->
             _state.update {
-                val newStatus = if (it.repositories.lastOrNull()?.id == response.last().id) {
-                    LastPageStatus.Final
-                } else {
+                val newList = (it.repositories + response).distinctBy { it.id }
+
+                val newStatus = if (newList.size > it.repositories.size) {
                     LastPageStatus.Success
+                } else {
+                    LastPageStatus.Final
                 }
 
                 it.copy(
                     loading = LoadingState.Non,
-                    repositories = (it.repositories + response).distinctBy { it.id }.toPersistentList(),
+                    repositories = newList.toPersistentList(),
                     lastPage = newPage,
                     lastPageStatus = newStatus
                 )
@@ -93,7 +91,7 @@ internal class GithubRepositoriesViewModel @Inject constructor(
                             loading = LoadingState.Non,
                             repositories = response.toPersistentList(),
                             lastPageStatus = LastPageStatus.Success,
-                            lastPage = 1,
+                            lastPage = INITIAL_PAGE,
                         )
                     }
                 }.catch { t ->
@@ -122,8 +120,10 @@ internal class GithubRepositoriesViewModel @Inject constructor(
     }
 
     companion object {
+        const val LOAD_NEW_PAGE_THRESHOLD = 5L
         private const val DEBOUNCE_TIME_MS = 700L
         private const val QUERY_LENGTH_VALIDATION = 3
         private const val PAGE_SIZE = 20
+        private const val INITIAL_PAGE = 1
     }
 }

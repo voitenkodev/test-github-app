@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.voitenko.testgithubapp.githubrepositories.components.RepositoryErrorItemContent
 import com.voitenko.testgithubapp.githubrepositories.components.RepositoryItemContent
+import com.voitenko.testgithubapp.githubrepositories.list.GithubRepositoriesViewModel.Companion.LOAD_NEW_PAGE_THRESHOLD
 import components.inputs.InputSearch
 import controls.Toast
 
@@ -32,10 +33,12 @@ internal fun GithubRepositoriesScreen(
 
     val lazyColumnListState = rememberLazyListState()
 
-    val shouldStartPaginate = remember {
+    val shouldStartPaginate = remember(state.lastPageStatus) {
         derivedStateOf {
-            (lazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-                ?: -9) >= (lazyColumnListState.layoutInfo.totalItemsCount - 6)
+            val canPaginate = state.lastPageStatus == LastPageStatus.Success
+            val lastVisibleItem = lazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+            val total = lazyColumnListState.layoutInfo.totalItemsCount
+            canPaginate && (lastVisibleItem >= total - LOAD_NEW_PAGE_THRESHOLD)
         }
     }
 
@@ -87,7 +90,7 @@ internal fun GithubRepositoriesScreen(
                     item {
                         RepositoryErrorItemContent(
                             msg = error,
-                            retry = viewModel::refreshLastPage
+                            retry = viewModel::loadNextPage
                         )
                     }
                 }
