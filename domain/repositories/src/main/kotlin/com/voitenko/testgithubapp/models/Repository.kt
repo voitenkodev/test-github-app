@@ -1,7 +1,5 @@
 package com.voitenko.testgithubapp.models
 
-import com.voitenko.testgithubapp.remote.dto.ItemDto
-
 data class Repository(
     val id: Int,
     val owner: String,
@@ -20,18 +18,4 @@ data class Repository(
             name = ""
         )
     }
-}
-
-fun ItemDto.toDomain(): Repository {
-    return Repository(
-        id = id ?: return Repository.EMPTY,
-        owner = owner?.login ?: return Repository.EMPTY,
-        name = name ?: return Repository.EMPTY,
-        language = language,
-        description = description,
-        fullName = fullName,
-        stargazersCount = stargazersCount,
-        createdAt = createdAt,
-        openIssues = openIssues,
-    )
 }

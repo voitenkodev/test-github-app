@@ -24,7 +24,8 @@ rootProject.name = "TestGithubApp"
 include(
     ":app",
 
-    ":data:remote",
+    ":services:network",
+    ":data:github-repository",
 
     ":domain:repositories",
 
@@ -34,4 +35,3 @@ include(
     ":features:github-repositories",
     ":features:repository-details",
 )
- 
