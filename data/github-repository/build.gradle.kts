@@ -17,9 +17,6 @@ dependencies {
     implementation(projects.services.network)
     implementation(projects.domain.repositories)
 
-    // Pager
-    implementation(libs.pager)
-
     // Hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

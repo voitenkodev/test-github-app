@@ -11,9 +11,6 @@ dependencies {
     // Std-libs
     implementation(libs.coroutines)
 
-    // Pager
-    implementation(libs.pager.common)
-
     // Hilt
     implementation(libs.hilt.core)
     kapt(libs.hilt.compiler)

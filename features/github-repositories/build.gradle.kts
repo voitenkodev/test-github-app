@@ -31,10 +31,6 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.material3)
 
-    // Pager
-    implementation(libs.pager)
-    implementation(libs.pager.compose)
-
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.compose)

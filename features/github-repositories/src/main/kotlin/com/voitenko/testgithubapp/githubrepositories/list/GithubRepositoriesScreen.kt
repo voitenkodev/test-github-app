@@ -8,16 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemContentType
-import com.voitenko.testgithubapp.models.Repository
 import com.voitenko.testgithubapp.githubrepositories.components.RepositoryErrorItemContent
 import com.voitenko.testgithubapp.githubrepositories.components.RepositoryItemContent
 import components.inputs.InputSearch
@@ -30,7 +30,20 @@ internal fun GithubRepositoriesScreen(
     onDetailsClick: (name: String, owner: String) -> Unit
 ) {
 
-    val repositories: LazyPagingItems<Repository> = viewModel.repositories.collectAsLazyPagingItems()
+    val lazyColumnListState = rememberLazyListState()
+
+    val shouldStartPaginate = remember {
+        derivedStateOf {
+            (lazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+                ?: -9) >= (lazyColumnListState.layoutInfo.totalItemsCount - 6)
+        }
+    }
+
+    LaunchedEffect(key1 = shouldStartPaginate.value) {
+        if (shouldStartPaginate.value) {
+            viewModel.loadNextPage()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -38,32 +51,25 @@ internal fun GithubRepositoriesScreen(
             modifier = Modifier.fillMaxWidth(),
             value = state.query,
             onValueChange = viewModel::setQuery,
-            loading = repositories.loadState.refresh is LoadState.Loading
+            loading = state.loading == LoadingState.Search
         )
 
         LazyColumn(
+            state = lazyColumnListState,
             modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
-            items(
-                count = repositories.itemCount,
-                contentType = repositories.itemContentType { "Repository" }
-            ) { index ->
-
-                val repository = repositories[index]
-
-                if (repository != null) {
-                    RepositoryItemContent(
-                        modifier = Modifier.fillMaxWidth(),
-                        repo = repository,
-                        onClick = onDetailsClick
-                    )
-                }
+            items(items = state.repositories, key = { it.id }) {
+                RepositoryItemContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    repo = it,
+                    onClick = onDetailsClick
+                )
             }
 
-            if (repositories.loadState.append is LoadState.Loading) {
+            if (state.loading == LoadingState.Item) {
                 item {
                     Box(modifier = Modifier.fillMaxWidth()) {
                         CircularProgressIndicator(
@@ -75,18 +81,20 @@ internal fun GithubRepositoriesScreen(
                 }
             }
 
-            (repositories.loadState.append as? LoadState.Error)?.error?.localizedMessage?.let { error ->
-                item {
-                    RepositoryErrorItemContent(
-                        msg = error,
-                        retry = repositories::retry
-                    )
+            (state.lastPageStatus as? LastPageStatus.Broken)?.error
+                .takeIf { state.loading == LoadingState.Non }
+                ?.let { error ->
+                    item {
+                        RepositoryErrorItemContent(
+                            msg = error,
+                            retry = viewModel::refreshLastPage
+                        )
+                    }
                 }
-            }
         }
     }
 
-    (repositories.loadState.refresh as? LoadState.Error)?.error?.localizedMessage?.let { error ->
-        Toast(message = error)
+    if (state.error != null) {
+        Toast(message = state.error, clear = viewModel::clearError)
     }
 }

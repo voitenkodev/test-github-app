@@ -12,16 +12,16 @@ import java.net.UnknownHostException
 
 class RemoteDataSource(private val api: Api) {
 
-    suspend fun getRepositories(query: String, page: Int, pageSize: Int): RepositoriesDto {
-        return runCatching {
-            api.getRepositories(query = query, perPage = pageSize, page = page)
-        }
-            .onFailure { it.parseErrorMessage() }
-            .getOrThrow()
+    fun getRepositories(query: String, page: Int, pageSize: Int): Flow<RepositoriesDto> {
+        return flow {
+            emit(api.getRepositories(query = query, perPage = pageSize, page = page))
+        }.parseErrorMessage()
     }
 
     fun getRepositoryById(name: String, owner: String): Flow<ItemDto> {
-        return flow { emit(api.getRepositoryById(name = name, owner = owner)) }.parseErrorMessage()
+        return flow {
+            emit(api.getRepositoryById(name = name, owner = owner))
+        }.parseErrorMessage()
     }
 
     private inline fun <reified T> Flow<T>.parseErrorMessage() = this.catch {
